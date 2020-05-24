@@ -1,6 +1,6 @@
 # Jersey Restful Service Integration With Spring
 
-:-Vikas[http://www.javababu.com](http://www.javababu.com/)
+:-Vikas   [http://www.javababu.com](http://www.javababu.com/)
 
 This blog show how to integrate Jersey Restful Service with Spring Framework. Jersey has provided SpringServlet class using which we can make a spring bean exposed as Restful Service by annotating with Jax-rs annotations.
 
@@ -15,6 +15,8 @@ This blog show how to integrate Jersey Restful Service with Spring Framework. Je
 5. STS
 
 **Followings are project Structures :**
+
+
 
 ![](RackMultipart20200524-4-7kje9h_html_aa505494bda27137.png)
 
