@@ -19,302 +19,192 @@ This blog show how to integrate Jersey Restful Service with Spring Framework. Je
 ![](RackMultipart20200524-4-7kje9h_html_aa505494bda27137.png)
 
 **Followings are dependencies:**
+```xml
+<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.3.0</version>
+			<classifier>sources</classifier>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey.contribs</groupId>
+			<artifactId>jersey-spring</artifactId>
+			<version>1.19.3</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-web</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-beans</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-context</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-aop</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>4.3.8.RELEASE</version>
+		</dependency>
+	</dependencies>
 
-\&lt;dependencies\&gt;
+```
 
-\&lt;dependency\&gt;
-
-\&lt;groupId\&gt;junit\&lt;/groupId\&gt;
-
-\&lt;artifactId\&gt;junit\&lt;/artifactId\&gt;
-
-\&lt;version\&gt;3.8.1\&lt;/version\&gt;
-
-\&lt;scope\&gt;test\&lt;/scope\&gt;
-
-\&lt;/dependency\&gt;
-
-\&lt;dependency\&gt;
-
-\&lt;groupId\&gt;javax.servlet\&lt;/groupId\&gt;
-
-\&lt;artifactId\&gt;javax.servlet-api\&lt;/artifactId\&gt;
-
-\&lt;version\&gt;3.1.0\&lt;/version\&gt;
-
-\&lt;/dependency\&gt;
-
-\&lt;dependency\&gt;
-
-\&lt;groupId\&gt;javax.xml.bind\&lt;/groupId\&gt;
-
-\&lt;artifactId\&gt;jaxb-api\&lt;/artifactId\&gt;
-
-\&lt;version\&gt;2.3.0\&lt;/version\&gt;
-
-\&lt;classifier\&gt;sources\&lt;/classifier\&gt;
-
-\&lt;scope\&gt;provided\&lt;/scope\&gt;
-
-\&lt;/dependency\&gt;
-
-\&lt;dependency\&gt;
-
-\&lt;groupId\&gt;com.sun.jersey.contribs\&lt;/groupId\&gt;
-
-\&lt;artifactId\&gt;jersey-spring\&lt;/artifactId\&gt;
-
-\&lt;version\&gt;1.19.3\&lt;/version\&gt;
-
-\&lt;exclusions\&gt;
-
-\&lt;exclusion\&gt;
-
-\&lt;groupId\&gt;org.springframework\&lt;/groupId\&gt;
-
-\&lt;/exclusion\&gt;
-
-\&lt;exclusion\&gt;
-
-\&lt;groupId\&gt;org.springframework\&lt;/groupId\&gt;
-
-\&lt;artifactId\&gt;spring-core\&lt;/artifactId\&gt;
-
-\&lt;/exclusion\&gt;
-
-\&lt;exclusion\&gt;
-
-\&lt;groupId\&gt;org.springframework\&lt;/groupId\&gt;
-
-\&lt;artifactId\&gt;spring-web\&lt;/artifactId\&gt;
-
-\&lt;/exclusion\&gt;
-
-\&lt;exclusion\&gt;
-
-\&lt;groupId\&gt;org.springframework\&lt;/groupId\&gt;
-
-\&lt;artifactId\&gt;spring-beans\&lt;/artifactId\&gt;
-
-\&lt;/exclusion\&gt;
-
-\&lt;exclusion\&gt;
-
-\&lt;groupId\&gt;org.springframework\&lt;/groupId\&gt;
-
-\&lt;artifactId\&gt;spring-context\&lt;/artifactId\&gt;
-
-\&lt;/exclusion\&gt;
-
-\&lt;exclusion\&gt;
-
-\&lt;groupId\&gt;org.springframework\&lt;/groupId\&gt;
-
-\&lt;artifactId\&gt;spring-aop\&lt;/artifactId\&gt;
-
-\&lt;/exclusion\&gt;
-
-\&lt;/exclusions\&gt;
-
-\&lt;/dependency\&gt;
-
-\&lt;dependency\&gt;
-
-\&lt;groupId\&gt;org.springframework\&lt;/groupId\&gt;
-
-\&lt;artifactId\&gt;spring-webmvc\&lt;/artifactId\&gt;
-
-\&lt;version\&gt;4.3.8.RELEASE\&lt;/version\&gt;
-
-\&lt;/dependency\&gt;
-
-\&lt;/dependencies\&gt;
-
-We exposed Spring bean as Restful Service, so that we can use ioc container like dependency injection.
-
+We exposed Spring bean as Restful Service, so that  we can use ioc container like dependency injection.
+```java
 @Component
+@Path("/transaction")
+public class Transaction {
 
-@Path(&quot;/transaction&quot;)
+	@Autowired
+	protected TransactionService transactionService;
 
-**public**** class** Transaction {
-
-@Autowired
-
-**protected** TransactionService transactionService;
-
-@GET
-
-@Produces(MediaType._ **APPLICATION\_XML** _)
-
-@Path(&quot;/payments/{payId}&quot;)
-
-**public** List\&lt;EPayment\&gt; getTransactions(@PathParam(&quot;payId&quot;) String payId) {
-
-List\&lt;EPayment\&gt; ePayments = **null** ;
-
-ePayments = transactionService.transactionDetails(payId);
-
-**return** ePayments;
-
+	@GET
+	@Produces(MediaType.APPLICATION_XML)
+	@Path("/payments/{payId}")
+	public List<EPayment> getTransactions(@PathParam("payId") String payId) {
+		List<EPayment> ePayments = null;
+		ePayments = transactionService.transactionDetails(payId);
+		return ePayments;
+	}
 }
 
-}
+
+```
 
 Here Transaction is spring Bean class annotated with @Component annotation. For using as Rest Endpoint, we need to register with Jersy runtime, this can be done by SpringServlet provided by Jersy.
 
-\&lt;listener\&gt;
-
-\&lt;listener-class\&gt;org.springframework.web.context.ContextLoaderListener\&lt;/listener-class\&gt;
-
-\&lt;/listener\&gt;
-
-\&lt;context-param\&gt;
-
-\&lt;param-name\&gt;contextConfigLocation\&lt;/param-name\&gt;
-
-\&lt;param-value\&gt;/WEB-INF/application-context.xml\&lt;/param-value\&gt;
-
-\&lt;/context-param\&gt;
-
-\&lt;servlet\&gt;
-
-\&lt;servlet-name\&gt;jersey-servlet\&lt;/servlet-name\&gt;
-
-\&lt;servlet-class\&gt;com.sun.jersey.spi.spring.container.servlet.SpringServlet\&lt;/servlet-class\&gt;
-
-\&lt;init-param\&gt;
-
-\&lt;param-name\&gt;com.sun.jersey.config.property.packages\&lt;/param-name\&gt;
-
-\&lt;param-value\&gt;com.jb.resource\&lt;/param-value\&gt;
-
-\&lt;/init-param\&gt;
-
-\&lt;load-on-startup\&gt;1\&lt;/load-on-startup\&gt;
-
-\&lt;/servlet\&gt;
-
-\&lt;servlet-mapping\&gt;
-
-\&lt;servlet-name\&gt;jersey-servlet\&lt;/servlet-name\&gt;
-
-\&lt;url-pattern\&gt;/api/\*\&lt;/url-pattern\&gt;
-
-\&lt;/servlet-mapping\&gt;
+```xml
+<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/application-context.xml</param-value>
+	</context-param>
+	<servlet>
+		<servlet-name>jersey-servlet</servlet-name>
+		<servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>com.jb.resource</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>jersey-servlet</servlet-name>
+		<url-pattern>/api/*</url-pattern>
+	</servlet-mapping>
+```
 
 _application-context.xml_ – Register bean and enable the component auto scanning feature.
 
-\&lt;?xmlversion=_&quot;1.0&quot;_encoding=_&quot;UTF-8&quot;_?\&gt;
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
-\&lt;beansxmlns=_&quot;http://www.springframework.org/schema/beans&quot;_
+	<context:component-scan
+		base-package="com.jb.service, com.jb.resource" />
+</beans>
 
-xmlns:xsi=_&quot;http://www.w3.org/2001/XMLSchema-instance&quot;_
-
-xmlns:context=_&quot;http://www.springframework.org/schema/context&quot;_
-
-xsi:schemaLocation=_&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd_
-
-_http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd&quot;_\&gt;
-
-\&lt;context:component-scan
-
-base-package=_&quot;com.jb.service, com.jb.resource&quot;_/\&gt;
-
-\&lt;/beans\&gt;
-
-**Here it&#39;s service class**
-
+```
+Here it’s service class
+```java
 @Service
+public class TransactionService {
 
-**public**** class** TransactionService {
 
-**public** List\&lt;EPayment\&gt; transactionDetails(String payId) {
+	public List<EPayment> transactionDetails(String payId) {
+		List<EPayment> payments = null;
+		payments=new ArrayList<>();
+		payments.add(new EPayment("1000040527856", "Vikas", 15000));
+		return payments;
 
-List\&lt;EPayment\&gt; payments = **null** ;
-
-payments= **new** ArrayList\&lt;\&gt;();
-
-payments.add( **new** EPayment(&quot;1000040527856&quot;, &quot;Vikas&quot;, 15000));
-
-**return** payments;
-
+	}
 }
+```
 
-}
-
-**Here it&#39;s dto class**
-
-@XmlRootElement(name = &quot;e-pay&quot;)
-
+Here it’s dto class
+```java
+@XmlRootElement(name = "e-pay")
 @XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+public class EPayment {
+	@XmlElement(name = "acc-no")
+	protected String accNo;
+	@XmlElement(name = "name")
+	protected String Name;
+	protected float amount;
 
-@XmlAccessorType(XmlAccessType._ **FIELD** _)
+	public EPayment() {
+		
+	}
+	public EPayment(String accNo, String name, float amount) {
+		super();
+		this.accNo = accNo;
+		Name = name;
+		this.amount = amount;
+	}
 
-**public**** class** EPayment {
+	public String getAccNo() {
+		return accNo;
+	}
 
-@XmlElement(name = &quot;acc-no&quot;)
+	public void setAccNo(String accNo) {
+		this.accNo = accNo;
+	}
 
-**protected** String accNo;
+	public String getName() {
+		return Name;
+	}
 
-@XmlElement(name = &quot;name&quot;)
+	public void setName(String name) {
+		Name = name;
+	}
 
-**protected** String Name;
+	public float getAmount() {
+		return amount;
+	}
 
-**protected**** float**amount;
-
-**public** EPayment() {
-
-}
-
-**public** EPayment(String accNo, String name, **float** amount) {
-
-**super** ();
-
-**this**.accNo = accNo;
-
-Name = name;
-
-**this**.amount = amount;
-
-}
-
-**public** String getAccNo() {
-
-**return** accNo;
-
-}
-
-**public**** void** setAccNo(String accNo) {
-
-**this**.accNo = accNo;
-
-}
-
-**public** String getName() {
-
-**return** Name;
+	public void setAmount(float amount) {
+		this.amount = amount;
+	}
 
 }
 
-**public**** void** setName(String name) {
-
-Name = name;
-
-}
-
-**public**** float** getAmount() {
-
-**return** amount;
-
-}
-
-**public**** void**setAmount(**float**amount) {
-
-**this**.amount = amount;
-
-}
-
-}
+```
 
 Url:-[http://localhost:8181/jersy-test/api/transaction/payments/111](http://localhost:8181/jersy-test/api/transaction/payments/111)
 
