@@ -210,4 +210,4 @@ public class EPayment {
 
 Url:-[http://localhost:8181/jersy-test/api/transaction/payments/111](http://localhost:8181/jersy-test/api/transaction/payments/111)
 
-![](https://github.com/JavaBabu/JavaBabu.github.io/blob/master/spring-jersy-output.PNG)
+![](spring-jersy-output.PNG)
