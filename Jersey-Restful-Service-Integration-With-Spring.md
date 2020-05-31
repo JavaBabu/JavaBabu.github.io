@@ -18,7 +18,7 @@ This blog shows how to integrate Jersey Restful Service with Spring Framework. J
 
 
 
-![](https://github.com/JavaBabu/JavaBabu.github.io/blob/master/spring-jersy-project-structure.PNG)
+![](spring-jersy-project-structure.PNG)
 
 **Followings are dependencies:**
 ```xml
